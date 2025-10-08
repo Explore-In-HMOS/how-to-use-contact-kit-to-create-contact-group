@@ -1,0 +1,11 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/ContactPage",
+    "pages/AddContactPage",
+    "pages/ContactsPage",
+    "pages/GroupsPage",
+    "pages/AddGroupPage",
+    "pages/GroupPage"
+  ]
+}
