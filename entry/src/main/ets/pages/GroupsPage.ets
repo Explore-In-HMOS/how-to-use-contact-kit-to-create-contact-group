@@ -1,9 +1,6 @@
 import {Group} from '../types/Group';
 import {getGroups} from '../utils/GroupsUtils';
-import { common} from '@kit.AbilityKit';
-import { LengthMetrics } from '@kit.ArkUI';
-import { ArcList, ArcListItem, ArcListAttribute, ArcListItemAttribute } from '@kit.ArkUI';
-import {router} from '@kit.ArkUI'
+import { ArcList, ArcListItem, ArcListAttribute, ArcListItemAttribute, LengthMetrics } from '@kit.ArkUI';
 
 
 @Builder
@@ -24,7 +21,7 @@ export struct GroupsPage {
   private listSize: string = '410px';
 
   private navigateToAddGroup() {
-    router.pushUrl({
+    this.getUIContext().getRouter().pushUrl({
       url: 'pages/AddGroupPage'
     });
   }
@@ -94,7 +91,7 @@ export struct GroupsPage {
               .backgroundColor('#f0f8ff')
             }.align(Alignment.Center)
             .onClick(() => {
-              router.push({
+              this.getUIContext().getRouter().pushUrl({
                 url: 'pages/GroupPage',
                 params: item
               });

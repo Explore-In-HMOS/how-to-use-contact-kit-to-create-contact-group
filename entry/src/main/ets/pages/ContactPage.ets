@@ -1,5 +1,4 @@
 import { Contact } from '../types/Contact';
-import router from '@ohos.router';
 import { deleteContact, updateContact } from '../utils/ContactUtils';
 import { common } from '@kit.AbilityKit';
 import prompt from '@ohos.prompt';
@@ -15,7 +14,7 @@ struct ContactPage {
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext;
 
   aboutToAppear(): void {
-    const params = router.getParams() as Contact;
+    const params = this.getUIContext().getRouter().getParams() as Contact;
     if (params) {
       this.contact = {
         id: params.id,
@@ -90,7 +89,7 @@ struct ContactPage {
                 duration: 2000
               });
               setTimeout(() => {
-                router.back();
+                this.getUIContext().getRouter().back();
               }, 1000);
             })
             .catch((error: BusinessError) => {

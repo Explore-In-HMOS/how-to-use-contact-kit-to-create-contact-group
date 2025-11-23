@@ -1,11 +1,9 @@
 import { Group } from '../types/Group';
-import router from '@ohos.router';
-import { deleteGroup, updateGroup, getContactsInGroup } from '../utils/GroupsUtils';
 import prompt from '@ohos.prompt';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { Contact } from '../types/Contact';
 import { getContacts } from '../utils/ContactUtils';
-import { addContactToGroup, removeContactFromGroup } from '../utils/GroupsUtils';
+import { addContactToGroup, removeContactFromGroup, deleteGroup, updateGroup, getContactsInGroup } from '../utils/GroupsUtils';
 import common from '@ohos.app.ability.common';
 
 @Entry
@@ -23,7 +21,7 @@ export struct GroupPage {
   @State selectedContact: Contact | null = null;
 
   aboutToAppear(): void {
-    const params = router.getParams() as Group;
+    const params = this.getUIContext().getRouter().getParams() as Group;
     if (params) {
       this.group = {
         id: params.id,
@@ -191,7 +189,7 @@ export struct GroupPage {
                 duration: 2000
               });
               setTimeout(() => {
-                router.back();
+                this.getUIContext().getRouter().back();
               }, 1000);
             })
             .catch((error: BusinessError) => {
@@ -293,7 +291,7 @@ export struct GroupPage {
                   .fontSize(16)
                   .fontColor('#666666')
                   .margin({ bottom: 10 })
-                Text('Click "Add Contact" to get started')
+                Text('Click Add Contact to get started')
                   .fontSize(14)
                   .fontColor('#999999')
               }

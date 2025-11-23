@@ -1,9 +1,7 @@
 import {Contact} from '../types/Contact';
 import {getContacts} from '../utils/ContactUtils';
 import { common} from '@kit.AbilityKit';
-import { LengthMetrics } from '@kit.ArkUI';
-import { ArcList, ArcListItem, ArcListAttribute, ArcListItemAttribute } from '@kit.ArkUI';
-import {router} from '@kit.ArkUI'
+import { ArcList, ArcListItem, ArcListAttribute, ArcListItemAttribute, LengthMetrics } from '@kit.ArkUI';
 
 @Builder
 function buildText() {
@@ -24,7 +22,7 @@ struct ContactsPage {
   private listSize: string = '410px';
 
   private navigateToAddContact() {
-    router.pushUrl({
+    this.getUIContext().getRouter().pushUrl({
       url: 'pages/AddContactPage'
     });
   }
@@ -94,7 +92,7 @@ struct ContactsPage {
               .backgroundColor('#f0f8ff')
             }.align(Alignment.Center)
             .onClick(() => {
-              router.push({
+              this.getUIContext().getRouter().pushUrl({
                 url: 'pages/ContactPage',
                 params: item
               });

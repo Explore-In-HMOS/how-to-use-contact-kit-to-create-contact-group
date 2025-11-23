@@ -1,7 +1,6 @@
 import { addContact } from '../utils/ContactUtils';
 import { common } from '@kit.AbilityKit';
-import { prompt, router } from '@kit.ArkUI';
-import { promptAction } from '@kit.ArkUI';
+import { prompt, promptAction } from '@kit.ArkUI';
 import { BusinessError } from '@kit.BasicServicesKit';
 
 @Entry
@@ -25,7 +24,7 @@ struct AddContactPage {
           duration: 2000
         });
         setTimeout(() => {
-          router.back();
+          this.getUIContext().getRouter().back();
         }, 1000);
       })
         .catch((error: BusinessError) => {
