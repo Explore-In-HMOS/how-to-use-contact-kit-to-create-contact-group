@@ -6,17 +6,16 @@ import { BusinessError } from '@kit.BasicServicesKit';
 
 @Builder
 function buildText() {
-  Column() {
-    Text('Contact Groups')
-      .fontSize('36px')
-      .fontWeight(FontWeight.Bold)
-  }
+  Text('Contact Groups')
+    .fontSize('36px')
+    .fontWeight(FontWeight.Bold)
 }
 
 @Entry
 @Component
 struct Index {
 
+  @Provide pathStack: NavPathStack = new NavPathStack()
   @State mainMenuItems: MainMenuItem[] = mainMenuItems
   private watchSize: string = '466px'
   private listSize: string = '410px'
@@ -34,7 +33,7 @@ struct Index {
       return result.authResults[0] === 0;
     } catch (err) {
       console.error('Permission Error:', (err as BusinessError).code);
-      promptAction.showToast({
+      promptAction.openToast({
         message: 'Permission Error: ' + (err as BusinessError).code,
         duration: 3000
       });
@@ -49,7 +48,7 @@ struct Index {
       return result.authResults[0] === 0;
     } catch (err) {
       console.error('Permission Error:', (err as BusinessError).code);
-      promptAction.showToast({
+      promptAction.openToast({
         message: 'Permission Error: ' + (err as BusinessError).code,
         duration: 3000
       });
@@ -63,57 +62,55 @@ struct Index {
   }
 
   build() {
-    Column() {
-      Stack() {
-        ArcList({ initialIndex: 0, header: this.tabBar1 }) {
-          ForEach(this.mainMenuItems, (item: MainMenuItem) => {
-            ArcListItem() {
-              Button({ type: ButtonType.Capsule }) {
-                Row() {
-                  Image(item.icon)
-                    .width('64px')
-                    .height('64px')
-                    .margin({ right: '12px' })
-                  Text(`${item.name}`)
-                    .fontSize('36px')
-                    .fontColor(Color.Black)
-                    .fontWeight(FontWeight.Bold)
+    Navigation() {
+      Column() {
+        Stack() {
+          ArcList({ initialIndex: 0, header: this.tabBar1 }) {
+            ForEach(this.mainMenuItems, (item: MainMenuItem) => {
+              ArcListItem() {
+                Button({ type: ButtonType.Capsule }) {
+                  Row() {
+                    Image(item.icon)
+                      .width('64px')
+                      .height('64px')
+                      .margin({ right: '12px' })
+                    Text(`${item.name}`)
+                      .fontSize('36px')
+                      .fontColor(Color.Black)
+                      .fontWeight(FontWeight.Bold)
+                  }
+                  .justifyContent(FlexAlign.Center)
+                  .width('100%')
                 }
-                .justifyContent(FlexAlign.Center)
-                .width('100%')
-              }
-              .width(this.listSize)
-              .height('100px')
-              .fontSize('24px')
-              .fontColor(Color.Black)
-              .fontWeight(FontWeight.Bold)
-              .focusable(true)
-              .opacity(0.9)
-              .focusOnTouch(true)
-              .backgroundColor('#f0f8ff')
-            }.align(Alignment.Center).onClick(() => {
+                .width(this.listSize)
+                .height('100px')
+                .fontSize('24px')
+                .fontColor(Color.Black)
+                .fontWeight(FontWeight.Bold)
+                .focusable(true)
+                .opacity(0.9)
+                .focusOnTouch(true)
+                .backgroundColor('#f0f8ff')
+              }.align(Alignment.Center).onClick(() => {
+                this.pathStack.pushPathByName(`${item.pageName}`,null)
+              })
 
-              this.getUIContext().getRouter().pushUrl({
-                url: `pages/${item.pageName}`
-              });
-
-            })
-
-          }, (item: string, index: number) => item + index)
+            }, (item: string, index: number) => item)
+          }
+          .space(LengthMetrics.px(10))
+          .borderRadius(this.watchSize)
+          .focusable(true)
+          .focusOnTouch(true)
+          .defaultFocus(true)
         }
-        .space(LengthMetrics.px(10))
+        .align(Alignment.Center)
+        .width(this.watchSize)
+        .height(this.watchSize)
+        .border({color: Color.Black, width: 3})
         .borderRadius(this.watchSize)
-        .focusable(true)
-        .focusOnTouch(true)
-        .defaultFocus(true)
       }
-      .align(Alignment.Center)
-      .width(this.watchSize)
-      .height(this.watchSize)
-      .border({color: Color.Black, width: 3})
-      .borderRadius(this.watchSize)
-    }
-    .height('100%')
-    .width('100%')
+      .height('100%')
+      .width('100%')
+    }.mode(NavigationMode.Stack).hideTitleBar(true)
   }
 }

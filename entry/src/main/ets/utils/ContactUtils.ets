@@ -4,8 +4,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
 import { promptAction } from '@kit.ArkUI';
 import relationalStore from '@ohos.data.relationalStore';
 import {Contact} from '../types/Contact';
-import {rdbStore} from '../entryability/EntryAbility'
-
+import {GlobalRdbStore} from '../entryability/EntryAbility'
 
 export async function addContact(context: common.UIAbilityContext, fullName: string, phoneNumber: string) {
   try {
@@ -18,8 +17,8 @@ export async function addContact(context: common.UIAbilityContext, fullName: str
     contact.addContact(context, contactInfo, async (err: BusinessError, data) => {
       if (err) {
         console.error('Adding Error:', err.code);
-        promptAction.showToast({
-          message: 'Adding Error: ' + err.code,
+        promptAction.openToast({
+          message: `${err.message}`,
           duration: 3000
         });
         return;
@@ -31,8 +30,8 @@ export async function addContact(context: common.UIAbilityContext, fullName: str
         'name': fullName,
         'phone': phoneNumber
       };
-      await rdbStore.insert('contacts', valueBucket)
-      promptAction.showToast({
+      await GlobalRdbStore.rdbStore.insert('contacts', valueBucket)
+      promptAction.openToast({
         message: 'Contact added successfully',
         duration: 3000
       });
@@ -40,7 +39,7 @@ export async function addContact(context: common.UIAbilityContext, fullName: str
 
   } catch (error) {
     console.error('Unexpected error in addContact:', error);
-    promptAction.showToast({
+    promptAction.openToast({
       message: 'Unexpected error occurred while adding contact',
       duration: 3000
     });
@@ -50,20 +49,23 @@ export async function addContact(context: common.UIAbilityContext, fullName: str
 export async function deleteContact(context: common.UIAbilityContext, key: string) {
   try {
     contact.deleteContact(context, key);
-    promptAction.showToast({
+    promptAction.openToast({
       message: 'Contact deleted successfully',
       duration: 3000
     });
   } catch (error) {
     console.error('Unexpected error in deleteContact:', error);
-    promptAction.showToast({
+    promptAction.openToast({
       message: 'Unexpected error occurred while deleting contact',
       duration: 3000
     });
   }
 }
 
-export async function updateContact(context: common.UIAbilityContext, id: number, fullName: string, phoneNumber: string) {
+export async function updateContact(context: common.UIAbilityContext,
+  id: number,
+  fullName: string,
+  phoneNumber: string) {
   try {
     let newContactInfo: contact.Contact = {
       name: { fullName: fullName },
@@ -78,14 +80,14 @@ export async function updateContact(context: common.UIAbilityContext, id: number
       'name': fullName,
       'phone': phoneNumber
     };
-    await rdbStore.update(valueBucket, predicates);
-    promptAction.showToast({
+    await GlobalRdbStore.rdbStore.update(valueBucket, predicates);
+    promptAction.openToast({
       message: 'Contact updated successfully',
       duration: 3000
     });
   } catch (error) {
     console.error('Unexpected error in updateContact:', error);
-    promptAction.showToast({
+    promptAction.openToast({
       message: 'Unexpected error occurred while updating contact',
       duration: 3000
     });
@@ -127,7 +129,7 @@ export async function getContacts(context: common.UIAbilityContext): Promise<Con
       })
     } catch (error) {
       console.error('Unexpected error in getContacts:', error);
-      promptAction.showToast({
+      promptAction.openToast({
         message: 'Error: ' + (error as BusinessError).code,
         duration: 3000
       });

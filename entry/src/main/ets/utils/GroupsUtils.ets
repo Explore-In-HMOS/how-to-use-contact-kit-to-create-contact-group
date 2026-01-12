@@ -3,15 +3,14 @@ import { promptAction } from '@kit.ArkUI';
 import relationalStore from '@ohos.data.relationalStore';
 import {Group} from '../types/Group';
 import { Contact } from '../types/Contact';
-import {rdbStore} from '../entryability/EntryAbility'
-
+import {GlobalRdbStore} from '../entryability/EntryAbility'
 
 export async function getGroups(): Promise<Group[]> {
   const groups: Group[] = [];
 
   try {
     const predicates = new relationalStore.RdbPredicates('groups');
-    const resultSet = await rdbStore.query(predicates, ['id', 'name']);
+    const resultSet = await GlobalRdbStore.rdbStore.query(predicates, ['id', 'name']);
 
     while (resultSet.goToNextRow()) {
       groups.push({
@@ -36,7 +35,7 @@ export async function addGroup(name: string){
     const valueBucket: relationalStore.ValuesBucket = {
       'name': name.trim()
     };
-    await rdbStore.insert('groups', valueBucket);
+    await GlobalRdbStore.rdbStore.insert('groups', valueBucket);
   } catch (error) {
     throw new Error(error);
   }
@@ -62,7 +61,7 @@ export async function updateGroup(groupId: number, newGroupName: string) {
       'name': trimmedName
     };
 
-    await rdbStore.update(valueBucket, predicatesUpdate);
+    await GlobalRdbStore.rdbStore.update(valueBucket, predicatesUpdate);
   } catch(error) {
     throw new Error(error);
   }
@@ -76,7 +75,7 @@ export async function deleteGroup(groupId: number) {
   try {
     const predicates = new relationalStore.RdbPredicates('groups');
     predicates.equalTo('id', groupId);
-    await rdbStore.delete(predicates);
+    await GlobalRdbStore.rdbStore.delete(predicates);
   } catch (error) {
     throw new Error(error);
   }
@@ -98,7 +97,7 @@ export async function addContactToGroup(contactId: number, groupId: number) {
       'group_id': groupId
     };
 
-    await rdbStore.insert('contact_groups', valueBucket);
+    await GlobalRdbStore.rdbStore.insert('contact_groups', valueBucket);
 
   } catch (error) {
     const err = error as BusinessError;
@@ -130,7 +129,7 @@ export async function removeContactFromGroup(contactId: number, groupId: number)
     predicates.equalTo('contact_id', contactId);
     predicates.equalTo('group_id', groupId);
 
-    const affectedRows = await rdbStore.delete(predicates);
+    const affectedRows = await GlobalRdbStore.rdbStore.delete(predicates);
 
     if (affectedRows === 0) {
       throw new Error('Contact is not in this group!');
@@ -155,7 +154,7 @@ export async function getContactsInGroup(groupId: number): Promise<Contact[]> {
       WHERE cg.group_id = ?
     `;
 
-    resultSet = await rdbStore.querySql(query, [groupId]) as relationalStore.ResultSet;
+    resultSet = await GlobalRdbStore.rdbStore.querySql(query, [groupId]) as relationalStore.ResultSet;
 
     while (resultSet.goToNextRow()) {
       contacts.push({

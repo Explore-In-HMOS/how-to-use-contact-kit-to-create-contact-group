@@ -4,27 +4,20 @@ import { common} from '@kit.AbilityKit';
 import { ArcList, ArcListItem, ArcListAttribute, ArcListItemAttribute, LengthMetrics } from '@kit.ArkUI';
 
 @Builder
-function buildText() {
-  Column() {
-    Text('Contacts')
-      .fontSize('36px')
-      .fontWeight(FontWeight.Bold)
-  }
+export function ContactsPageBuilder() {
+  ContactsPage()
 }
 
-@Entry
 @Component
 struct ContactsPage {
   @State contacts: Contact[] = [];
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext;
-
+  @Consume pathStack: NavPathStack
   private watchSize: string = '466px';
   private listSize: string = '410px';
 
   private navigateToAddContact() {
-    this.getUIContext().getRouter().pushUrl({
-      url: 'pages/AddContactPage'
-    });
+    this.pathStack.pushPathByName('AddContactPage',null)
   }
 
   private async loadContacts() {
@@ -41,45 +34,18 @@ struct ContactsPage {
   }
 
   build() {
-    Column() {
-      Stack() {
-        ArcList({ initialIndex: 0 }) {
-          ArcListItem() {
-            Button({ type: ButtonType.Capsule }) {
-              Row() {
-                Text('+ Add Contact')
-                  .fontSize('24px')
-              }
-              .justifyContent(FlexAlign.Center)
-              .width('100%')
-            }
-            .width(this.listSize)
-            .height('100px')
-            .fontSize('24px')
-            .fontColor(Color.Black)
-            .fontWeight(FontWeight.Bold)
-            .focusable(true)
-            .opacity(0.9)
-            .focusOnTouch(true)
-            .backgroundColor('#e6f7ff')
-            .onClick(() => {
-              this.navigateToAddContact();
-            })
-          }.align(Alignment.Center)
-          ForEach(this.contacts, (item: Contact) => {
+    NavDestination() {
+      Column() {
+        Stack() {
+          ArcList({ initialIndex: 0 }) {
             ArcListItem() {
               Button({ type: ButtonType.Capsule }) {
-                Column() {
-                  Text(item.name)
-                    .fontSize('34px')
-                    .fontWeight(FontWeight.Bold)
-                    .fontColor(Color.Black)
-                    .textAlign(TextAlign.Center)
-                    .width('100%')
-                    .margin({ bottom: 1 })
+                Row() {
+                  Text('+ Add Contact')
+                    .fontSize('24px')
                 }
+                .justifyContent(FlexAlign.Center)
                 .width('100%')
-                .padding(10)
               }
               .width(this.listSize)
               .height('100px')
@@ -89,30 +55,57 @@ struct ContactsPage {
               .focusable(true)
               .opacity(0.9)
               .focusOnTouch(true)
-              .backgroundColor('#f0f8ff')
+              .backgroundColor('#e6f7ff')
+              .onClick(() => {
+                this.navigateToAddContact();
+              })
             }.align(Alignment.Center)
-            .onClick(() => {
-              this.getUIContext().getRouter().pushUrl({
-                url: 'pages/ContactPage',
-                params: item
-              });
-            })
+            ForEach(this.contacts, (item: Contact) => {
+              ArcListItem() {
+                Button({ type: ButtonType.Capsule }) {
+                  Column() {
+                    Text(item.name)
+                      .fontSize('34px')
+                      .fontWeight(FontWeight.Bold)
+                      .fontColor(Color.Black)
+                      .textAlign(TextAlign.Center)
+                      .width('100%')
+                      .margin({ bottom: 1 })
+                  }
+                  .width('100%')
+                  .padding(10)
+                }
+                .width(this.listSize)
+                .height('100px')
+                .fontSize('24px')
+                .fontColor(Color.Black)
+                .fontWeight(FontWeight.Bold)
+                .focusable(true)
+                .opacity(0.9)
+                .focusOnTouch(true)
+                .backgroundColor('#f0f8ff')
+              }.align(Alignment.Center)
+              .onClick(() => {
+                this.pathStack.pushPathByName('ContactPage',item)
+              })
 
-          }, (contact: Contact) => contact.name)
+            }, (contact: Contact) => contact.name)
+          }
+          .space(LengthMetrics.px(10))
+          .borderRadius(this.watchSize)
+          .focusable(true)
+          .focusOnTouch(true)
+          .defaultFocus(true)
         }
-        .space(LengthMetrics.px(10))
+        .align(Alignment.Center)
+        .width(this.watchSize)
+        .height(this.watchSize)
+        .border({color: Color.Black, width: 3})
         .borderRadius(this.watchSize)
-        .focusable(true)
-        .focusOnTouch(true)
-        .defaultFocus(true)
       }
-      .align(Alignment.Center)
-      .width(this.watchSize)
-      .height(this.watchSize)
-      .border({color: Color.Black, width: 3})
-      .borderRadius(this.watchSize)
+      .height('100%')
+      .width('100%')
     }
-    .height('100%')
-    .width('100%')
+    .hideTitleBar(true)
   }
 }

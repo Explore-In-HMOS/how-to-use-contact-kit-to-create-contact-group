@@ -2,28 +2,21 @@ import {Group} from '../types/Group';
 import {getGroups} from '../utils/GroupsUtils';
 import { ArcList, ArcListItem, ArcListAttribute, ArcListItemAttribute, LengthMetrics } from '@kit.ArkUI';
 
-
 @Builder
-function buildText() {
-  Column() {
-    Text('Contacts')
-      .fontSize('36px')
-      .fontWeight(FontWeight.Bold)
-  }
+export function GroupsPageBuilder() {
+  GroupsPage()
 }
 
-@Entry
 @Component
 export struct GroupsPage {
 
   @State groups: Group[] = [];
   private watchSize: string = '466px';
   private listSize: string = '410px';
+  @Consume pathStack: NavPathStack
 
   private navigateToAddGroup() {
-    this.getUIContext().getRouter().pushUrl({
-      url: 'pages/AddGroupPage'
-    });
+    this.pathStack.pushPathByName('AddGroupPage',null)
   }
 
   private async loadGroups() {
@@ -40,45 +33,18 @@ export struct GroupsPage {
   }
 
   build() {
-    Column() {
-      Stack() {
-        ArcList({ initialIndex: 0 }) {
-          ArcListItem() {
-            Button({ type: ButtonType.Capsule }) {
-              Row() {
-                Text('+ Add Group')
-                  .fontSize('24px')
-              }
-              .justifyContent(FlexAlign.Center)
-              .width('100%')
-            }
-            .width(this.listSize)
-            .height('100px')
-            .fontSize('24px')
-            .fontColor(Color.Black)
-            .fontWeight(FontWeight.Bold)
-            .focusable(true)
-            .opacity(0.9)
-            .focusOnTouch(true)
-            .backgroundColor('#e6f7ff')
-            .onClick(() => {
-              this.navigateToAddGroup();
-            })
-          }.align(Alignment.Center)
-          ForEach(this.groups, (item: Group) => {
+    NavDestination() {
+      Column() {
+        Stack() {
+          ArcList({ initialIndex: 0 }) {
             ArcListItem() {
               Button({ type: ButtonType.Capsule }) {
-                Column() {
-                  Text(item.name)
-                    .fontSize('34px')
-                    .fontWeight(FontWeight.Bold)
-                    .fontColor(Color.Black)
-                    .textAlign(TextAlign.Center)
-                    .width('100%')
-                    .margin({ bottom: 1 })
+                Row() {
+                  Text('+ Add Group')
+                    .fontSize('24px')
                 }
+                .justifyContent(FlexAlign.Center)
                 .width('100%')
-                .padding(10)
               }
               .width(this.listSize)
               .height('100px')
@@ -88,30 +54,56 @@ export struct GroupsPage {
               .focusable(true)
               .opacity(0.9)
               .focusOnTouch(true)
-              .backgroundColor('#f0f8ff')
+              .backgroundColor('#e6f7ff')
+              .onClick(() => {
+                this.navigateToAddGroup();
+              })
             }.align(Alignment.Center)
-            .onClick(() => {
-              this.getUIContext().getRouter().pushUrl({
-                url: 'pages/GroupPage',
-                params: item
-              });
-            })
+            ForEach(this.groups, (item: Group) => {
+              ArcListItem() {
+                Button({ type: ButtonType.Capsule }) {
+                  Column() {
+                    Text(item.name)
+                      .fontSize('34px')
+                      .fontWeight(FontWeight.Bold)
+                      .fontColor(Color.Black)
+                      .textAlign(TextAlign.Center)
+                      .width('100%')
+                      .margin({ bottom: 1 })
+                  }
+                  .width('100%')
+                  .padding(10)
+                }
+                .width(this.listSize)
+                .height('100px')
+                .fontSize('24px')
+                .fontColor(Color.Black)
+                .fontWeight(FontWeight.Bold)
+                .focusable(true)
+                .opacity(0.9)
+                .focusOnTouch(true)
+                .backgroundColor('#f0f8ff')
+              }.align(Alignment.Center)
+              .onClick(() => {
+                this.pathStack.pushPathByName('GroupPage',item)
+              })
 
-          }, (group: Group) => group.name)
+            }, (group: Group) => group.name)
+          }
+          .space(LengthMetrics.px(10))
+          .borderRadius(this.watchSize)
+          .focusable(true)
+          .focusOnTouch(true)
+          .defaultFocus(true)
         }
-        .space(LengthMetrics.px(10))
+        .align(Alignment.Center)
+        .width(this.watchSize)
+        .height(this.watchSize)
+        .border({color: Color.Black, width: 3})
         .borderRadius(this.watchSize)
-        .focusable(true)
-        .focusOnTouch(true)
-        .defaultFocus(true)
       }
-      .align(Alignment.Center)
-      .width(this.watchSize)
-      .height(this.watchSize)
-      .border({color: Color.Black, width: 3})
-      .borderRadius(this.watchSize)
-    }
-    .height('100%')
-    .width('100%')
+      .height('100%')
+      .width('100%')
+    }.hideTitleBar(true)
   }
 }

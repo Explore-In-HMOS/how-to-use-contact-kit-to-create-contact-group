@@ -3,7 +3,10 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import relationalStore from '@ohos.data.relationalStore';
 
-export let rdbStore: relationalStore.RdbStore;
+export class GlobalRdbStore {
+  static rdbStore: relationalStore.RdbStore
+}
+
 interface StoreConfig {
   name: string;
   securityLevel: relationalStore.SecurityLevel;
@@ -51,10 +54,10 @@ export default class EntryAbility extends UIAbility {
     `;
 
     try {
-      rdbStore = await relationalStore.getRdbStore(this.context, CONTACTSTREE_CONFIG);
-      await rdbStore.executeSql(SQL_CREATE_CONTACTS_TABLE);
-      await rdbStore.executeSql(SQL_CREATE_GROUPS_TABLE);
-      await rdbStore.executeSql(SQL_CREATE_CONTACT_GROUPS_TABLE);
+      GlobalRdbStore.rdbStore = await relationalStore.getRdbStore(this.context, CONTACTSTREE_CONFIG);
+      await GlobalRdbStore.rdbStore.executeSql(SQL_CREATE_CONTACTS_TABLE);
+      await GlobalRdbStore.rdbStore.executeSql(SQL_CREATE_GROUPS_TABLE);
+      await GlobalRdbStore.rdbStore.executeSql(SQL_CREATE_CONTACT_GROUPS_TABLE);
     } catch (error) {
       hilog.error(DOMAIN, 'DataAbility', 'RDB error: %{public}s', JSON.stringify(error));
     }

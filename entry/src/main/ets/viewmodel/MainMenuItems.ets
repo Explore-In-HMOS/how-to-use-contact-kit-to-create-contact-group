@@ -10,5 +10,5 @@ export const mainMenuItems: MainMenuItem[] = [
     icon: $r('app.media.groups'),
     name: 'Groups',
     pageName: 'GroupsPage'
-  },
+  }
 ]

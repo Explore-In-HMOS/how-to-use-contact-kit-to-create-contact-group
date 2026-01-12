@@ -1,4 +1,4 @@
-> **Note:** To access all shared projects, get information about environment setup, and view other guides, please visit [Explore-In-HMOS-Wearable Index](https://github.com/Explore-In-HMOS-Wearable/hmos-index).
+> **Note:** To access all shared projects, get information about environment setup, and view other guides, please visit 
 
 # How to Use Contact Kit to Create Contact Groups
 
@@ -27,7 +27,6 @@ Contact Groups is a codelab project that users can manage their contacts, easily
 - **Frameworks**: HarmonyOS SDK 5.1.0(18)
 - **Tools**: DevEco Studio Vers 5.1.0.842
 - **Libraries**: @kit.ArkUI, @kit.ContactsKit, @ohos.data.relationalStore, @kit.AbilityKit,@kit.BasicServicesKit
-
 
 ## Required Permissions
 
@@ -108,4 +107,3 @@ src
 
 Contact Groups is distributed under the terms of the MIT License.
 See the [LICENSE](/LICENSE) for more information.
-

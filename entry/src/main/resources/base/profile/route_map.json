@@ -1,0 +1,52 @@
+{
+  "routerMap": [
+    {
+      "name": "AddContactPage",
+      "pageSourceFile": "src/main/ets/pages/AddContactPage.ets",
+      "buildFunction": "AddContactPageBuilder",
+      "data": {
+        "description" : "this is AddContact Page"
+      }
+    },
+    {
+      "name": "AddGroupPage",
+      "pageSourceFile": "src/main/ets/pages/AddGroupPage.ets",
+      "buildFunction": "AddGroupPageBuilder",
+      "data": {
+        "description" : "this is AddGroup Page"
+      }
+    },
+    {
+      "name": "ContactPage",
+      "pageSourceFile": "src/main/ets/pages/ContactPage.ets",
+      "buildFunction": "ContactPageBuilder",
+      "data": {
+        "description" : "this is Contact Page"
+      }
+    },
+    {
+      "name": "ContactsPage",
+      "pageSourceFile": "src/main/ets/pages/ContactsPage.ets",
+      "buildFunction": "ContactsPageBuilder",
+      "data": {
+        "description" : "this is Contacts Page"
+      }
+    },
+    {
+      "name": "GroupPage",
+      "pageSourceFile": "src/main/ets/pages/GroupPage.ets",
+      "buildFunction": "GroupPageBuilder",
+      "data": {
+        "description" : "this is Group Page"
+      }
+    },
+    {
+      "name": "GroupsPage",
+      "pageSourceFile": "src/main/ets/pages/GroupsPage.ets",
+      "buildFunction": "GroupsPageBuilder",
+      "data": {
+        "description" : "this is Groups Page"
+      }
+    }
+  ]
+}
